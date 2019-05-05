@@ -17,6 +17,12 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu'
 })
 
+const declarations =
+  'document.body.style.fontSize = "300%";' +
+  'var xx=" |xx| ";' +
+  'yy=" |yy| ";' +
+  'function f() { document.body.innerHTML += "<p>Function f was called.</p>"; };'
+
 export default class App extends Component {
   componentDidMount () {
     setTimeout(() => {
@@ -39,13 +45,7 @@ export default class App extends Component {
         <WebView
           ref={r => (this.webRef = r)}
           source={{ html: '<h1>Hi WebView!</h1>' }}
-          injectedJavaScript={
-            'document.body.style.fontSize = "300%";' +
-            'var xx=" |xx| ";' +
-            'yy=" |yy| ";' +
-            'function f() { document.body.innerHTML += "<p>Function f was called.</p>"; };' +
-            'true'
-          }
+          injectedJavaScript={declarations + '; true'}
         />
       </View>
     )
