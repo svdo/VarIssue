@@ -18,13 +18,35 @@ const instructions = Platform.select({
 })
 
 export default class App extends Component {
+  componentDidMount () {
+    setTimeout(() => {
+      this.webRef.injectJavaScript(
+        'var msg="";' +
+          'try { msg += xx } catch (ex) { msg += ex.message };' +
+          'try { msg += yy } catch (ey) { msg += ey.message };' +
+          'try { f() } catch (ef) { msg += ef.message };' +
+          'setTimeout(function() { window.alert(msg) })' // setTimeout so that f() can update DOM before alert is displayed
+      )
+    }, 1000)
+  }
+
   render () {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
-        <WebView source={{ html: '<h1>Hi WebView!</h1>' }} />
+        <WebView
+          ref={r => (this.webRef = r)}
+          source={{ html: '<h1>Hi WebView!</h1>' }}
+          injectedJavaScript={
+            'document.body.style.fontSize = "300%";' +
+            'var xx=" |xx| ";' +
+            'yy=" |yy| ";' +
+            'function f() { document.body.innerHTML += "<p>Function f was called.</p>"; };' +
+            'true'
+          }
+        />
       </View>
     )
   }
