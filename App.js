@@ -26,6 +26,9 @@ const declarations =
 export default class App extends Component {
   componentDidMount () {
     setTimeout(() => {
+      this.webRef.injectJavaScript(declarations)
+    }, 1000)
+    setTimeout(() => {
       this.webRef.injectJavaScript(
         'var msg="";' +
           'try { msg += xx } catch (ex) { msg += ex.message };' +
@@ -33,7 +36,7 @@ export default class App extends Component {
           'try { f() } catch (ef) { msg += ef.message };' +
           'setTimeout(function() { window.alert(msg) })' // setTimeout so that f() can update DOM before alert is displayed
       )
-    }, 1000)
+    }, 2000)
   }
 
   render () {
@@ -45,7 +48,6 @@ export default class App extends Component {
         <WebView
           ref={r => (this.webRef = r)}
           source={{ html: '<h1>Hi WebView!</h1>' }}
-          injectedJavaScript={declarations + '; true'}
         />
       </View>
     )
